@@ -1,0 +1,668 @@
+---
+import { products } from "../data/products.js";
+
+const closetOrder = [
+	"grape-escape",
+	"pink-sundae",
+	"cherry-on-top",
+	"blue-hour",
+	"sunday-club",
+	"lemon-drop",
+	"after-hours",
+	"cloud-nine",
+];
+const closetProducts = [...products].sort((a, b) => closetOrder.indexOf(a.slug) - closetOrder.indexOf(b.slug));
+const heroProduct = products.find((product) => product.slug === "grape-escape");
+const base = `${import.meta.env.BASE_URL}/`;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content="Meet Comfy: hoodies for slow mornings, late nights, and everything in between." />
+		<meta name="theme-color" content="#f7f3eb" />
+		<title>Comfy — Pick your new favorite hoodie</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<style>
+			:root {
+				font-family: "DM Sans", sans-serif;
+				color: #30283b;
+				background: #f7f3eb;
+				font-synthesis: none;
+				text-rendering: optimizeLegibility;
+				--ink: #30283b;
+				--muted: #827c86;
+				--paper: #f7f3eb;
+				--purple: #a894d1;
+				--cyan: #a8dfe3;
+				--pink: #f0c2d3;
+				--yellow: #f0df9e;
+				--line: #e7e0d7;
+				--display: "Space Grotesk", sans-serif;
+			}
+			* { box-sizing: border-box; }
+			html { scroll-behavior: smooth; }
+			body { margin: 0; min-width: 320px; overflow-x: hidden; }
+			button, a { color: inherit; font: inherit; }
+			a { text-decoration: none; }
+			button { cursor: pointer; }
+			.announcement {
+				padding: 10px 20px;
+				background: var(--ink);
+				color: white;
+				text-align: center;
+				font-size: 10px;
+				font-weight: 600;
+				letter-spacing: .13em;
+				text-transform: uppercase;
+			}
+			.announcement span { color: var(--yellow); }
+			header {
+				height: 76px;
+				padding: 0 7%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				border-bottom: 1px solid var(--line);
+			}
+			.brand {
+				font-family: var(--display);
+				font-size: 28px;
+				font-weight: 700;
+				letter-spacing: -.09em;
+			}
+			.brand i { color: #947bbd; font-style: normal; }
+			nav { display: flex; align-items: center; gap: 30px; }
+			nav a { font-size: 12px; font-weight: 600; }
+			nav a:hover { color: #8368ad; }
+			.cart {
+				padding: 10px 15px;
+				border: 1px solid var(--ink);
+				border-radius: 30px;
+				background: transparent;
+				font-size: 11px;
+				font-weight: 700;
+			}
+			.cart span { margin-left: 7px; color: #8368ad; }
+			.hero {
+				min-height: 580px;
+				position: relative;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				align-items: center;
+				overflow: hidden;
+				padding: 70px 10%;
+			}
+			.hero::before, .hero::after {
+				content: "";
+				position: absolute;
+				z-index: -1;
+				border-radius: 50%;
+				filter: blur(1px);
+			}
+			.hero::before {
+				width: 400px;
+				height: 400px;
+				right: 9%;
+				top: 12%;
+				background: #ece5f2;
+			}
+			.hero::after {
+				width: 170px;
+				height: 170px;
+				right: 8%;
+				bottom: 3%;
+				background: #f5e8dc;
+			}
+			.hero-copy { position: relative; z-index: 1; }
+			.eyebrow {
+				display: flex;
+				align-items: center;
+				gap: 9px;
+				font-size: 10px;
+				font-weight: 700;
+				letter-spacing: .16em;
+				text-transform: uppercase;
+			}
+			.eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; }
+			h1, h2, p { margin-top: 0; }
+			h1 {
+				margin: 16px 0 10px;
+				font-family: var(--display);
+				font-size: clamp(88px, 13vw, 174px);
+				font-weight: 600;
+				letter-spacing: -.105em;
+				line-height: .8;
+			}
+			h1 span { color: #9c83c5; }
+			.hero-copy > p {
+				margin: 23px 0 28px;
+				color: #77707a;
+				font-size: 14px;
+				line-height: 1.7;
+			}
+			.hero-cta {
+				display: inline-flex;
+				align-items: center;
+				gap: 28px;
+				padding: 15px 19px;
+				border: 1px solid var(--ink);
+				border-radius: 3px;
+				background: var(--ink);
+				color: white;
+				font-size: 10px;
+				font-weight: 700;
+				letter-spacing: .1em;
+				text-transform: uppercase;
+				transition: transform 160ms ease, background 160ms ease;
+			}
+			.hero-cta:hover { transform: translateY(-3px); background: #57476c; }
+			.hero-cta b { color: var(--yellow); font-size: 17px; font-weight: 400; }
+			.hero-art {
+				height: 400px;
+				position: relative;
+				display: grid;
+				place-items: center;
+			}
+			.hero-photo {
+				position: relative;
+				z-index: 1;
+				width: min(100%, 360px);
+				height: 100%;
+				object-fit: contain;
+				filter: drop-shadow(0 22px 18px #51423a2b);
+				transform: rotate(2deg);
+			}
+			.hero-sticker {
+				position: absolute;
+				right: 3%;
+				bottom: 6%;
+				display: grid;
+				width: 94px;
+				height: 94px;
+				place-items: center;
+				border: 1px solid #fff9;
+				border-radius: 50%;
+				background: var(--yellow);
+				font-family: var(--display);
+				font-size: 11px;
+				font-weight: 700;
+				line-height: 1.2;
+				text-align: center;
+				transform: rotate(9deg);
+			}
+			.collection {
+				padding: 77px 0 89px;
+				background: #f0ece5;
+				overflow: hidden;
+			}
+			.collection-heading {
+				padding: 0 7%;
+				display: flex;
+				align-items: flex-end;
+				justify-content: space-between;
+				gap: 20px;
+			}
+			.collection-heading h2 {
+				margin: 12px 0 0;
+				font-family: var(--display);
+				font-size: clamp(34px, 5vw, 58px);
+				font-weight: 500;
+				letter-spacing: -.07em;
+				line-height: 1;
+			}
+			.collection-heading p {
+				max-width: 230px;
+				margin: 0;
+				color: var(--muted);
+				font-size: 12px;
+				line-height: 1.6;
+			}
+			.rail-controls { display: flex; gap: 8px; margin-top: 24px; padding: 0 7%; }
+			.rail-controls button {
+				width: 39px;
+				height: 39px;
+				border: 1px solid #cfc7c4;
+				border-radius: 50%;
+				background: transparent;
+				font-size: 17px;
+			}
+			.rail-controls button:hover { background: white; }
+			.wardrobe {
+				position: relative;
+				margin: 26px 7% 0;
+				padding: 26px 0 18px;
+				perspective: 1400px;
+				background: linear-gradient(90deg, #c9bcb0, #e5ddd3 5%, #eae3da 95%, #bcae9f);
+				border: 8px solid #d5c9bc;
+				box-shadow: 0 22px 40px #483c3218, inset 0 0 0 2px #f7f0e7;
+			}
+			.wardrobe-interior {
+				position: absolute;
+				inset: 0;
+				overflow: hidden;
+				background:
+					linear-gradient(90deg, #d2c5b8 0, transparent 7%, transparent 93%, #cbbdaf 100%),
+					linear-gradient(180deg, #e7ded3, #f3ece2 52%, #d8cbbd);
+			}
+			.wardrobe-interior::before, .wardrobe-interior::after {
+				content: "";
+				position: absolute;
+				left: 0;
+				right: 0;
+				height: 12px;
+				background: linear-gradient(#f9f4ed, #c9bbad);
+				box-shadow: 0 5px 8px #57483b18;
+			}
+			.wardrobe-interior::before { top: 0; }
+			.wardrobe-interior::after { bottom: 0; }
+			.wardrobe-label {
+				position: absolute;
+				top: 12px;
+				left: 50%;
+				z-index: 1;
+				padding: 7px 12px;
+				transform: translateX(-50%);
+				border-radius: 2px;
+				background: #f7f3ebd9;
+				color: #827c86;
+				font-size: 8px;
+				font-weight: 700;
+				letter-spacing: .16em;
+				text-transform: uppercase;
+			}
+			.hanger-window {
+				position: relative;
+				z-index: 1;
+				margin-top: 10px;
+				padding: 0 22px;
+			}
+			.hanger-window::before {
+				content: "";
+				position: absolute;
+				top: 35px;
+				right: 22px;
+				left: 22px;
+				height: 7px;
+				border: 1px solid #b7aaa0;
+				border-radius: 10px;
+				background: linear-gradient(180deg, #fff, #bdb1a8);
+				box-shadow: 0 5px 10px #51423a2b;
+			}
+			.hanger-rail {
+				position: relative;
+				display: flex;
+				align-items: flex-start;
+				gap: 15px;
+				overflow-x: auto;
+				padding: 0 8px 24px;
+				scroll-snap-type: x mandatory;
+				scroll-padding-inline: calc((100% - 190px) / 2);
+				scrollbar-width: thin;
+				scrollbar-color: #b7a9c5 transparent;
+			}
+			.hanger-rail::-webkit-scrollbar { height: 6px; }
+			.hanger-rail::-webkit-scrollbar-thumb { border-radius: 10px; background: #b7a9c5; }
+			.product-card {
+				flex: 0 0 190px;
+				position: relative;
+				padding-top: 43px;
+				scroll-snap-align: center;
+				transform: translateY(13px) scale(.82) rotateY(-31deg);
+				transform-origin: center top;
+				opacity: .76;
+				transition: transform 520ms cubic-bezier(.2,.8,.2,1), opacity 380ms ease;
+			}
+			.product-card.is-focused { transform: translateY(-13px) scale(1.13) rotateY(0); opacity: 1; z-index: 2; }
+			.hanger {
+				position: absolute;
+				top: 8px;
+				left: 50%;
+				z-index: 2;
+				width: 56px;
+				height: 38px;
+				transform: translateX(-50%);
+				filter: drop-shadow(0 3px 2px #51423a35);
+			}
+			.hanger::before {
+				content: "";
+				position: absolute;
+				top: -7px;
+				left: 24px;
+				width: 10px;
+				height: 15px;
+				border: 2px solid #958a83;
+				border-bottom: 0;
+				border-radius: 9px 9px 2px 2px;
+			}
+			.hanger::after {
+				content: "";
+				position: absolute;
+				top: 5px;
+				left: 0;
+				width: 54px;
+				height: 31px;
+				background: linear-gradient(165deg, transparent 46%, #9f938a 48%, #9f938a 52%, transparent 54%) left,
+					linear-gradient(195deg, transparent 46%, #9f938a 48%, #9f938a 52%, transparent 54%) right;
+				background-size: 50% 100%;
+				background-repeat: no-repeat;
+			}
+			.garment {
+				position: relative;
+				width: 100%;
+				height: 250px;
+				overflow: visible;
+				filter: drop-shadow(0 11px 9px #51423a25);
+				transition: filter 300ms ease, transform 400ms ease;
+				transform: perspective(800px) rotateY(-8deg);
+				background: transparent;
+			}
+			.is-focused .garment {
+				transform: perspective(800px) rotateY(0) translateY(-11px) scale(1.08);
+				filter: drop-shadow(0 19px 15px #51423a32);
+			}
+			.garment img {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+				object-position: center;
+			}
+			.closet-doors {
+				position: absolute;
+				inset: 0;
+				z-index: 4;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				perspective: 1400px;
+				pointer-events: none;
+			}
+			.door {
+				position: relative;
+				border: 1px solid #c5b6a8;
+				background:
+					linear-gradient(90deg, #fff3, transparent 10%, transparent 88%, #75665a21),
+					linear-gradient(135deg, #e4d8c9, #cfc0b1 48%, #e9ded1);
+				box-shadow: inset 0 0 0 8px #dfd2c4, inset 0 0 0 10px #c9b9aa;
+				backface-visibility: hidden;
+				animation-duration: 1250ms;
+				animation-delay: 250ms;
+				animation-timing-function: cubic-bezier(.2,.75,.2,1);
+				animation-fill-mode: forwards;
+			}
+			.door-left {
+				transform-origin: left center;
+				animation-name: open-left-door;
+			}
+			.door-right {
+				transform-origin: right center;
+				animation-name: open-right-door;
+			}
+			.door::before {
+				content: "";
+				position: absolute;
+				top: 50%;
+				width: 7px;
+				height: 38px;
+				margin-top: -19px;
+				border-radius: 5px;
+				background: linear-gradient(90deg, #8b7b6e, #d9c8b5, #8d7a68);
+				box-shadow: 1px 2px 4px #45372d40;
+			}
+			.door-left::before { right: 16px; }
+			.door-right::before { left: 16px; }
+			.door-label {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				color: #817366;
+				font-family: var(--display);
+				font-size: clamp(18px, 3vw, 34px);
+				font-weight: 600;
+				letter-spacing: -.08em;
+				transform: translate(-50%, -50%);
+			}
+			@keyframes open-left-door {
+				to { transform: rotateY(-108deg); }
+			}
+			@keyframes open-right-door {
+				to { transform: rotateY(108deg); }
+			}
+			.badge {
+				position: absolute;
+				top: 12px;
+				left: 12px;
+				z-index: 2;
+				padding: 8px 10px;
+				background: var(--paper);
+				font-size: 8px;
+				font-weight: 700;
+				letter-spacing: .1em;
+			}
+			.product-caption {
+				display: flex;
+				align-items: flex-start;
+				justify-content: space-between;
+				gap: 10px;
+				padding: 14px 2px;
+			}
+			.product-caption h3 { margin: 0 0 5px; font-size: 13px; font-weight: 700; }
+			.product-caption p { margin: 0; color: var(--muted); font-size: 10px; }
+			.product-caption strong { font-size: 12px; }
+			.product-link { display: block; outline-offset: 5px; }
+			.product-link:focus-visible { outline: 2px solid #8266ae; }
+			.scroll-hint {
+				padding: 8px 7% 0;
+				color: #827c86;
+				font-size: 9px;
+				font-weight: 700;
+				letter-spacing: .12em;
+				text-align: right;
+				text-transform: uppercase;
+			}
+			.slogan {
+				padding: 82px 20px 77px;
+				background: #e8e1ee;
+				text-align: center;
+			}
+			.slogan blockquote {
+				max-width: 760px;
+				margin: 0 auto;
+				font-family: var(--display);
+				font-size: clamp(30px, 5vw, 57px);
+				letter-spacing: -.065em;
+				line-height: 1.12;
+			}
+			.slogan blockquote span { color: #8269a9; }
+			.slogan p {
+				margin: 22px 0 0;
+				font-size: 10px;
+				font-weight: 700;
+				letter-spacing: .13em;
+			}
+			footer {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 20px;
+				padding: 25px 7%;
+				background: var(--ink);
+				color: white;
+				font-size: 10px;
+			}
+			footer .brand { font-size: 23px; }
+			footer p { margin: 0; color: #d3ced8; }
+			.toast {
+				position: fixed;
+				right: 20px;
+				bottom: 20px;
+				z-index: 5;
+				padding: 14px 18px;
+				transform: translateY(16px);
+				opacity: 0;
+				background: var(--ink);
+				color: white;
+				font-size: 12px;
+				pointer-events: none;
+				transition: 180ms ease;
+			}
+			.toast.show { transform: translateY(0); opacity: 1; }
+			@media (max-width: 700px) {
+				header { height: 66px; padding-inline: 20px; }
+				nav { gap: 14px; }
+				nav a { display: none; }
+				.hero {
+					min-height: 0;
+					grid-template-columns: 1fr;
+					padding: 63px 25px 25px;
+				}
+				h1 { font-size: clamp(100px, 28vw, 156px); }
+				.hero-copy > p { font-size: 12px; }
+				.hero-art { height: 300px; margin-top: 20px; }
+				.hero-photo { width: min(100%, 300px); }
+				.hero::before { width: 270px; height: 270px; top: auto; right: 12%; bottom: 8%; }
+				.hero-sticker { right: 3%; bottom: 3%; width: 77px; height: 77px; font-size: 9px; }
+				.collection { padding-top: 58px; }
+				.collection-heading { align-items: flex-start; flex-direction: column; padding-inline: 22px; }
+				.collection-heading h2 { font-size: 38px; }
+				.collection-heading p { max-width: 280px; }
+				.rail-controls { padding-inline: 22px; }
+				.wardrobe { margin: 22px 10px 0; border-width: 6px; padding-block: 20px 14px; }
+				.wardrobe-label { top: 8px; }
+				.hanger-window { padding-inline: 11px; }
+				.hanger-window::before { right: 11px; left: 11px; }
+				.product-card { flex-basis: min(49vw, 205px); scroll-margin-inline: 10px; }
+				.garment { height: min(64vw, 252px); }
+				.hanger-rail { gap: 8px; scroll-padding-inline: 18vw; }
+				.scroll-hint { padding-right: 22px; }
+				.slogan { padding: 63px 24px; }
+				footer { align-items: flex-start; flex-direction: column; padding: 24px 22px; }
+			}
+			@media (prefers-reduced-motion: reduce) {
+				*, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+			}
+		</style>
+	</head>
+	<body>
+		<div class="announcement">A little more you, a little less everyone else. <span>Free shipping over $100</span></div>
+		<header>
+			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
+			<nav aria-label="Main navigation">
+				<a href="#collection">The hoodies</a>
+				<a href="#our-thing">Our thing</a>
+				<button class="cart" type="button" aria-label="Shopping bag, 0 items">BAG <span id="cart-count">0</span></button>
+			</nav>
+		</header>
+
+		<main>
+			<section class="hero" aria-labelledby="hero-title">
+				<div class="hero-copy">
+					<div class="eyebrow">Good days start here</div>
+					<h1 id="hero-title">Com<span>fy</span></h1>
+					<p>Your soft place to land.<br />Meet the hoodie you won't want to take off.</p>
+					<a class="hero-cta" href="#collection">Click the hoodie you like <b>↓</b></a>
+				</div>
+				<div class="hero-art">
+					<img class="hero-photo" src={heroProduct.listingImage} alt={`${heroProduct.color} hoodie`} width="900" height="1400" fetchpriority="high" />
+					<div class="hero-sticker">SOFT<br />LOOKS GOOD<br />ON YOU ✳</div>
+				</div>
+			</section>
+
+			<section class="collection" id="collection" aria-labelledby="collection-title">
+				<div class="collection-heading">
+					<div>
+						<div class="eyebrow">Meet your new regulars</div>
+						<h2 id="collection-title">Pick your kind of cozy.</h2>
+					</div>
+					<p>Eight good moods, all on one hanger. Scroll to find the one that feels like you.</p>
+				</div>
+				<div class="rail-controls" aria-label="Hoodie collection controls">
+					<button type="button" id="rail-prev" aria-label="Scroll to previous hoodie">←</button>
+					<button type="button" id="rail-next" aria-label="Scroll to next hoodie">→</button>
+				</div>
+				<div class="wardrobe">
+					<div class="wardrobe-interior" aria-hidden="true"></div>
+					<div class="wardrobe-label" aria-hidden="true">Comfy wardrobe · pick a mood</div>
+					<div class="hanger-window">
+						<div class="hanger-rail" id="hanger-rail" tabindex="0" aria-label="Scroll through eight hoodies">
+						{closetProducts.map((product) => (
+							<article class="product-card">
+								<a class="product-link" href={`${base}hoodies/${product.slug}/`} aria-label={`View ${product.name} hoodie`}>
+									<div class="hanger" aria-hidden="true"></div>
+									<div class="garment">
+										<img src={product.listingImage} alt={`${product.color} hoodie`} width="900" height="1400" loading="lazy" />
+										{product.badge && <span class="badge">{product.badge}</span>}
+									</div>
+									<div class="product-caption">
+										<div>
+											<h3>{product.name}</h3>
+											<p>{product.color}</p>
+										</div>
+										<strong>${product.price}</strong>
+									</div>
+								</a>
+							</article>
+						))}
+						</div>
+					</div>
+					<div class="closet-doors" aria-hidden="true">
+						<div class="door door-left"><span class="door-label">Comfy</span></div>
+						<div class="door door-right"><span class="door-label">Comfy</span></div>
+					</div>
+				</div>
+				<div class="scroll-hint">Swipe or scroll to explore all 8 ↔</div>
+			</section>
+
+			<section class="slogan" id="our-thing">
+				<blockquote>Not just a hoodie. Your new <span>“cancel plans, stay in”</span> hoodie.</blockquote>
+				<p>Goodform — comfort looks good on you</p>
+			</section>
+		</main>
+		<footer>
+			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
+			<p>Wear it on repeat. Feel good doing it.</p>
+			<p>© 2025 COMFY STUDIO</p>
+			<p class="disclaimer">This is a model website — Comfy is not a real business.</p>
+		</footer>
+		<div class="toast" id="toast" role="status" aria-live="polite"></div>
+		<script>
+			const rail = document.querySelector("#hanger-rail");
+			const cards = [...document.querySelectorAll(".product-card")];
+			const cartCount = document.querySelector("#cart-count");
+			const cartButton = document.querySelector(".cart");
+			const storedCount = Number(localStorage.getItem("comfy-cart-count") || 0);
+			cartCount.textContent = String(storedCount);
+			cartButton.setAttribute("aria-label", `Shopping bag, ${storedCount} items`);
+
+			const updateFocusedCard = () => {
+				const railBounds = rail.getBoundingClientRect();
+				const center = railBounds.left + railBounds.width / 2;
+				let closestCard;
+				let closestDistance = Infinity;
+				cards.forEach((card) => {
+					const bounds = card.getBoundingClientRect();
+					const distance = Math.abs(bounds.left + bounds.width / 2 - center);
+					if (distance < closestDistance) {
+						closestDistance = distance;
+						closestCard = card;
+					}
+				});
+				cards.forEach((card) => card.classList.toggle("is-focused", card === closestCard));
+			};
+			rail.addEventListener("scroll", updateFocusedCard, { passive: true });
+			window.addEventListener("resize", updateFocusedCard);
+			updateFocusedCard();
+
+			const scrollByCard = (direction) => {
+				const focusedIndex = Math.max(0, cards.findIndex((card) => card.classList.contains("is-focused")));
+				const target = cards[Math.max(0, Math.min(cards.length - 1, focusedIndex + direction))];
+				target?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+			};
+			document.querySelector("#rail-prev").addEventListener("click", () => scrollByCard(-1));
+			document.querySelector("#rail-next").addEventListener("click", () => scrollByCard(1));
+		</script>
+	</body>
+</html>

@@ -1,0 +1,365 @@
+---
+import { products } from "../../data/products.js";
+
+export function getStaticPaths() {
+	return products.map((product) => ({
+		params: { slug: product.slug },
+		props: { product },
+	}));
+}
+
+const { product } = Astro.props;
+const base = `${import.meta.env.BASE_URL}/`;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={`${product.name}: ${product.description}`} />
+		<meta name="theme-color" content="#f7f3eb" />
+		<title>{product.name} Hoodie — Comfy</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<style>
+			:root {
+				font-family: "DM Sans", sans-serif;
+				color: #30283b;
+				background: #f7f3eb;
+				font-synthesis: none;
+				text-rendering: optimizeLegibility;
+				--ink: #30283b;
+				--muted: #827c86;
+				--paper: #f7f3eb;
+				--purple: #a894d1;
+				--cyan: #a8dfe3;
+				--pink: #f0c2d3;
+				--yellow: #f0df9e;
+				--line: #e7e0d7;
+				--display: "Space Grotesk", sans-serif;
+			}
+			* { box-sizing: border-box; }
+			body { margin: 0; min-width: 320px; }
+			button, a, select { color: inherit; font: inherit; }
+			a { text-decoration: none; }
+			button, select { cursor: pointer; }
+			.announcement {
+				padding: 10px 20px;
+				background: var(--ink);
+				color: white;
+				text-align: center;
+				font-size: 10px;
+				font-weight: 600;
+				letter-spacing: .13em;
+				text-transform: uppercase;
+			}
+			.announcement span { color: var(--yellow); }
+			header {
+				height: 76px;
+				padding: 0 7%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				border-bottom: 1px solid var(--line);
+			}
+			.brand {
+				font-family: var(--display);
+				font-size: 28px;
+				font-weight: 700;
+				letter-spacing: -.09em;
+			}
+			.brand span { color: #947bbd; }
+			nav { display: flex; align-items: center; gap: 30px; }
+			nav a { font-size: 12px; font-weight: 600; }
+			nav a:hover { color: #8368ad; }
+			.cart {
+				padding: 10px 15px;
+				border: 1px solid var(--ink);
+				border-radius: 30px;
+				background: transparent;
+				font-size: 11px;
+				font-weight: 700;
+			}
+			.cart span { margin-left: 7px; color: #8368ad; }
+			main { max-width: 1300px; margin: auto; padding: 34px 7% 90px; }
+			.breadcrumbs {
+				display: flex;
+				gap: 9px;
+				margin-bottom: 28px;
+				color: var(--muted);
+				font-size: 10px;
+			}
+			.breadcrumbs a:hover { color: var(--ink); }
+			.product-layout {
+				display: grid;
+				grid-template-columns: minmax(0, 1.15fr) minmax(320px, .75fr);
+				align-items: start;
+				gap: clamp(35px, 7vw, 95px);
+			}
+			.gallery {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 12px;
+			}
+			.view {
+				position: relative;
+				min-width: 0;
+				overflow: hidden;
+				aspect-ratio: .79;
+				background: #eee8df;
+			}
+			.view img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
+			.view span {
+				position: absolute;
+				bottom: 11px;
+				left: 11px;
+				padding: 7px 10px;
+				background: var(--paper);
+				font-size: 8px;
+				font-weight: 700;
+				letter-spacing: .1em;
+				text-transform: uppercase;
+			}
+			.product-info { position: sticky; top: 28px; padding: 14px 0 20px; }
+			.badge {
+				display: inline-block;
+				padding: 8px 10px;
+				background: var(--yellow);
+				font-size: 8px;
+				font-weight: 700;
+				letter-spacing: .1em;
+			}
+			.eyebrow {
+				margin: 19px 0 9px;
+				font-size: 10px;
+				font-weight: 700;
+				letter-spacing: .14em;
+				text-transform: uppercase;
+			}
+			h1, h2, p { margin-top: 0; }
+			h1 {
+				margin-bottom: 10px;
+				font-family: var(--display);
+				font-size: clamp(42px, 5vw, 64px);
+				font-weight: 500;
+				letter-spacing: -.075em;
+				line-height: .96;
+			}
+			.color { margin-bottom: 17px; color: var(--muted); font-size: 12px; }
+			.description { max-width: 420px; color: #726b76; font-size: 13px; line-height: 1.75; }
+			.price-line {
+				display: flex;
+				align-items: baseline;
+				gap: 12px;
+				margin: 20px 0 22px;
+			}
+			.price { font-family: var(--display); font-size: 26px; font-weight: 600; }
+			.price-note { color: var(--muted); font-size: 10px; }
+			label { display: block; margin-bottom: 9px; font-size: 10px; font-weight: 700; }
+			select {
+				width: 100%;
+				height: 48px;
+				padding: 0 14px;
+				border: 1px solid #d6ced2;
+				border-radius: 2px;
+				background: transparent;
+				font-size: 12px;
+			}
+			.add-to-bag {
+				width: 100%;
+				min-height: 52px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-top: 12px;
+				padding: 0 18px;
+				border: 0;
+				background: var(--ink);
+				color: white;
+				font-size: 10px;
+				font-weight: 700;
+				letter-spacing: .12em;
+				text-transform: uppercase;
+				transition: background 160ms ease;
+			}
+			.add-to-bag:hover { background: #57476c; }
+			.add-to-bag span { color: var(--yellow); font-size: 17px; }
+			.shipping-note {
+				margin: 13px 0 0;
+				color: var(--muted);
+				font-size: 10px;
+				text-align: center;
+			}
+			.specs { margin-top: 35px; border-top: 1px solid var(--line); }
+			.specs h2 {
+				margin: 23px 0 15px;
+				font-family: var(--display);
+				font-size: 20px;
+				font-weight: 600;
+				letter-spacing: -.04em;
+			}
+			.specs ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+			.specs li {
+				display: flex;
+				align-items: baseline;
+				gap: 11px;
+				color: #67616b;
+				font-size: 11px;
+			}
+			.specs li::before { content: "✳"; color: #947bbd; font-size: 12px; }
+			.slogan {
+				padding: 62px 20px 57px;
+				background: #e8e1ee;
+				text-align: center;
+			}
+			.slogan blockquote {
+				max-width: 760px;
+				margin: 0 auto;
+				font-family: var(--display);
+				font-size: clamp(28px, 4vw, 48px);
+				letter-spacing: -.065em;
+				line-height: 1.12;
+			}
+			.slogan blockquote span { color: #8269a9; }
+			.slogan p { margin: 19px 0 0; font-size: 10px; font-weight: 700; letter-spacing: .13em; }
+			footer {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 20px;
+				padding: 25px 7%;
+				background: var(--ink);
+				color: white;
+				font-size: 10px;
+			}
+			footer .brand { font-size: 23px; }
+			footer p { margin: 0; color: #d3ced8; }
+			footer .disclaimer { color: #f0df9e; }
+			.toast {
+				position: fixed;
+				right: 20px;
+				bottom: 20px;
+				z-index: 5;
+				padding: 14px 18px;
+				transform: translateY(16px);
+				opacity: 0;
+				background: var(--ink);
+				color: white;
+				font-size: 12px;
+				pointer-events: none;
+				transition: 180ms ease;
+			}
+			.toast.show { transform: translateY(0); opacity: 1; }
+			@media (max-width: 760px) {
+				header { height: 66px; padding-inline: 20px; }
+				nav { gap: 14px; }
+				nav a { display: none; }
+				main { padding: 24px 20px 60px; }
+				.product-layout { grid-template-columns: 1fr; gap: 24px; }
+				.product-info { position: static; grid-row: 1; padding-top: 8px; }
+				.gallery { grid-row: 2; gap: 8px; }
+				.view { aspect-ratio: .82; }
+				.slogan { padding: 54px 24px; }
+				footer { align-items: flex-start; flex-direction: column; padding: 24px 22px; }
+			}
+			@media (max-width: 380px) {
+				.gallery { grid-template-columns: 1fr; }
+				.view { aspect-ratio: .95; }
+			}
+			@media (prefers-reduced-motion: reduce) {
+				*, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+			}
+		</style>
+	</head>
+	<body>
+		<div class="announcement">A little more you, a little less everyone else. <span>Free shipping over $100</span></div>
+		<header>
+			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
+			<nav aria-label="Main navigation">
+				<a href={`${base}#collection`}>All hoodies</a>
+				<a href={`${base}#our-thing`}>Our thing</a>
+				<button class="cart" type="button" aria-label="Shopping bag, 0 items">BAG <span id="cart-count">0</span></button>
+			</nav>
+		</header>
+		<main>
+			<div class="breadcrumbs"><a href={base}>Home</a><span>/</span><a href={`${base}#collection`}>Hoodies</a><span>/</span><span>{product.name}</span></div>
+			<div class="product-layout">
+				<div class="gallery">
+					{product.modelImages.map((image, index) => (
+						<div class="view">
+							<img src={image} alt={`Model wearing the ${product.color} ${product.name} hoodie, look ${index + 1}`} width="900" height="1400" loading={index < 2 ? "eager" : "lazy"} />
+							<span>On-model look {index + 1}</span>
+						</div>
+					))}
+				</div>
+				<section class="product-info" aria-labelledby="product-title">
+					{product.badge && <span class="badge">{product.badge}</span>}
+					<p class="eyebrow">The Comfy collection</p>
+					<h1 id="product-title">{product.name}</h1>
+					<p class="color">{product.color} · Unisex relaxed fit</p>
+					<p class="description">{product.description}</p>
+					<div class="price-line">
+						<strong class="price">${product.price}</strong>
+						<span class="price-note">Taxes included · Free shipping over $100</span>
+					</div>
+					<label for="size">Choose your size</label>
+					<select id="size" name="size">
+						<option value="XS">XS</option>
+						<option value="S">S</option>
+						<option value="M" selected>M</option>
+						<option value="L">L</option>
+						<option value="XL">XL</option>
+						<option value="XXL">XXL</option>
+					</select>
+					<button class="add-to-bag" type="button" id="add-to-bag">Add to bag <span>↗</span></button>
+					<p class="shipping-note">Easy returns · Made for repeat wear</p>
+					<div class="specs">
+						<h2>Good to know</h2>
+						<ul>
+							{product.details.map((detail) => <li>{detail}</li>)}
+							<li>Machine wash cold, tumble dry low</li>
+							<li>Designed for your everyday comfort</li>
+						</ul>
+					</div>
+				</section>
+			</div>
+		</main>
+		<section class="slogan">
+			<blockquote>Not just a hoodie. Your new <span>“cancel plans, stay in”</span> hoodie.</blockquote>
+			<p>Goodform — comfort looks good on you</p>
+		</section>
+		<footer>
+			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
+			<p>Wear it on repeat. Feel good doing it.</p>
+			<p>© 2025 COMFY STUDIO</p>
+			<p class="disclaimer">This is a model website — Comfy is not a real business.</p>
+		</footer>
+		<div class="toast" id="toast" role="status" aria-live="polite"></div>
+		<script define:vars={{ productName: product.name }}>
+			const count = document.querySelector("#cart-count");
+			const cartButton = document.querySelector(".cart");
+			const toast = document.querySelector("#toast");
+			const storedCount = Number(localStorage.getItem("comfy-cart-count") || 0);
+			count.textContent = String(storedCount);
+			cartButton.setAttribute("aria-label", `Shopping bag, ${storedCount} items`);
+
+			document.querySelector("#add-to-bag").addEventListener("click", () => {
+				const nextCount = Number(localStorage.getItem("comfy-cart-count") || 0) + 1;
+				localStorage.setItem("comfy-cart-count", String(nextCount));
+				count.textContent = String(nextCount);
+				cartButton.setAttribute("aria-label", `Shopping bag, ${nextCount} items`);
+				const size = document.querySelector("#size").value;
+				toast.textContent = `${size} ${productName} added to your bag`;
+				toast.classList.add("show");
+				window.setTimeout(() => toast.classList.remove("show"), 2300);
+			});
+		</script>
+	</body>
+</html>
