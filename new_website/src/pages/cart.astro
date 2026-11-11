@@ -1,0 +1,186 @@
+---
+import { products } from "../data/products.js";
+
+const base = `${import.meta.env.BASE_URL}/`;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#f7f5ff" />
+		<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+		<title>Your bag — Comfy</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<style>
+			:root { font-family: "DM Sans", sans-serif; color: #34304d; background: #f7f5ff; font-synthesis: none; text-rendering: optimizeLegibility; }
+			* { box-sizing: border-box; }
+			body { margin: 0; }
+			a { color: inherit; text-decoration: none; }
+			.announcement { padding: 8px 18px; background: #34304d; color: #f0cf43; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-align: center; }
+			header { height: 78px; display: flex; align-items: center; justify-content: space-between; padding: 0 7%; border-bottom: 1px solid #e4e0ed; }
+			.brand { font-family: "Space Grotesk", sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -.08em; }
+			.brand span { color: #23c1c6; }
+			nav { display: flex; align-items: center; gap: 26px; font-size: 11px; }
+			.cart-link { padding: 11px 15px; border: 1px solid #d5d0e1; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+			main { max-width: 930px; min-height: 65vh; margin: 0 auto; padding: 74px 28px 90px; }
+			.eyebrow { margin: 0 0 10px; font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+			h1 { margin: 0 0 30px; font-family: "Space Grotesk", sans-serif; font-size: clamp(42px, 7vw, 68px); font-weight: 500; letter-spacing: -.08em; line-height: 1; }
+			#cart-items { display: grid; gap: 14px; }
+			.cart-row { display: grid; grid-template-columns: 110px 1fr auto; align-items: center; gap: 22px; padding: 16px; border: 1px solid #e2deec; background: #fffdfa; }
+			.cart-row img { width: 110px; height: 130px; object-fit: contain; background: #f0edf8; }
+			.row-info h2 { margin: 0 0 5px; font-family: "Space Grotesk", sans-serif; font-size: 22px; font-weight: 500; letter-spacing: -.05em; }
+			.row-info p { margin: 0 0 14px; color: #77728b; font-size: 11px; }
+			.row-controls { display: flex; align-items: center; gap: 9px; font-size: 11px; }
+			.row-controls button { min-width: 30px; min-height: 30px; border: 1px solid #d5d0e1; background: transparent; color: #34304d; cursor: pointer; }
+			.row-controls .remove { margin-left: 8px; border: 0; text-decoration: underline; }
+			.row-price { align-self: start; font-size: 14px; font-weight: 700; }
+			.summary { display: flex; justify-content: space-between; padding: 23px 4px; font-size: 13px; font-weight: 700; }
+			.empty { padding: 34px 20px; border: 1px solid #e2deec; background: #fffdfa; color: #77728b; font-size: 13px; line-height: 1.7; }
+			.empty a { color: #51466f; text-decoration: underline; }
+			.error { color: #a52136; font-size: 12px; }
+			footer { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 28px 7%; background: #34304d; color: #fff; font-size: 10px; }
+			footer .disclaimer { max-width: 430px; color: #f0cf43; font-size: 9px; font-weight: 700; line-height: 1.5; letter-spacing: .06em; }
+			@media (max-width: 560px) {
+				header { height: 66px; padding-inline: 20px; }
+				nav { gap: 12px; }
+				main { padding: 50px 18px 65px; }
+				.cart-row { grid-template-columns: 82px 1fr; gap: 13px; padding: 12px; }
+				.cart-row img { width: 82px; height: 105px; }
+				.row-price { grid-column: 2; grid-row: 1; justify-self: end; }
+				.row-info h2 { padding-right: 60px; font-size: 18px; }
+				footer { align-items: flex-start; flex-direction: column; padding: 24px 20px; }
+			}
+		</style>
+	</head>
+	<body>
+		<div class="announcement">THIS IS NOT A REAL BUSINESS, IT IS A MOCK-UP CREATED FOR DEMONSTRATION PURPOSES ONLY</div>
+		<header>
+			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
+			<nav aria-label="Main navigation">
+				<a href={`${base}#collection`}>Keep browsing</a>
+				<a class="cart-link" href={`${base}cart/`} aria-label="Shopping bag"><span id="cart-count">0</span> IN BAG</a>
+			</nav>
+		</header>
+		<main>
+			<p class="eyebrow">Good choice</p>
+			<h1>Your bag<span aria-hidden="true">.</span></h1>
+			<div id="cart-items" aria-live="polite"></div>
+			<p class="error" id="cart-error" role="alert" hidden></p>
+			<div id="cart-summary" hidden>
+				<div class="summary"><span>Subtotal</span><span id="subtotal"></span></div>
+				<p class="eyebrow">Shipping and taxes calculated at checkout. (Checkout is not enabled on this demo site.)</p>
+			</div>
+		</main>
+		<footer>
+			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
+			<p>Wear it on repeat. Feel good doing it.</p>
+			<p>© 2025 COMFY STUDIO</p>
+			<p class="disclaimer">THIS IS NOT A REAL BUSINESS, IT IS A MOCK-UP CREATED FOR DEMONSTRATION PURPOSES ONLY</p>
+		</footer>
+		<script>
+			import { products } from "../data/products.js";
+			import { readCart, removeFromCart, updateCartQuantity } from "../scripts/cart.js";
+
+			const rows = document.querySelector("#cart-items");
+			const errorMessage = document.querySelector("#cart-error");
+			const summary = document.querySelector("#cart-summary");
+			const count = document.querySelector("#cart-count");
+			const subtotal = document.querySelector("#subtotal");
+			const base = import.meta.env.BASE_URL;
+			const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+			function renderCart() {
+				const cart = readCart();
+				rows.replaceChildren();
+				let total = 0;
+				let itemCount = 0;
+
+				for (const item of cart) {
+					const product = products.find((entry) => entry.slug === item.slug);
+					if (!product) throw new Error(`Unknown product in bag: ${item.slug}`);
+
+					total += product.price * item.quantity;
+					itemCount += item.quantity;
+					const row = document.createElement("article");
+					row.className = "cart-row";
+
+					const image = document.createElement("img");
+					image.src = product.listingImage;
+					image.alt = `${product.color} hoodie`;
+					image.width = 110;
+					image.height = 130;
+
+					const info = document.createElement("div");
+					info.className = "row-info";
+					const title = document.createElement("h2");
+					title.textContent = product.name;
+					const colorSize = document.createElement("p");
+					colorSize.textContent = `${product.color} · Size ${item.size}`;
+					const controls = document.createElement("div");
+					controls.className = "row-controls";
+
+					const decrease = document.createElement("button");
+					decrease.type = "button";
+					decrease.textContent = "−";
+					decrease.setAttribute("aria-label", `Remove one ${product.name}`);
+					decrease.addEventListener("click", () => {
+						updateCartQuantity(item.slug, item.size, item.quantity - 1);
+						renderCart();
+					});
+					const quantity = document.createElement("span");
+					quantity.textContent = String(item.quantity);
+					const increase = document.createElement("button");
+					increase.type = "button";
+					increase.textContent = "+";
+					increase.setAttribute("aria-label", `Add one ${product.name}`);
+					increase.addEventListener("click", () => {
+						updateCartQuantity(item.slug, item.size, item.quantity + 1);
+						renderCart();
+					});
+					const remove = document.createElement("button");
+					remove.type = "button";
+					remove.className = "remove";
+					remove.textContent = "Remove";
+					remove.addEventListener("click", () => {
+						removeFromCart(item.slug, item.size);
+						renderCart();
+					});
+					controls.append(decrease, quantity, increase, remove);
+					info.append(title, colorSize, controls);
+
+					const price = document.createElement("strong");
+					price.className = "row-price";
+					price.textContent = money.format(product.price * item.quantity);
+					row.append(image, info, price);
+					rows.append(row);
+				}
+
+				count.textContent = String(itemCount);
+				summary.hidden = itemCount === 0;
+				if (itemCount > 0) subtotal.textContent = money.format(total);
+				if (itemCount === 0) {
+					const empty = document.createElement("p");
+					empty.className = "empty";
+					empty.append("Your bag is taking a cozy little break. ", document.createElement("br"));
+					const link = document.createElement("a");
+					link.href = `${base}/#collection`;
+					link.textContent = "Find your hoodie";
+					empty.append(link, ".");
+					rows.append(empty);
+				}
+			}
+
+			try {
+				renderCart();
+			} catch (error) {
+				errorMessage.hidden = false;
+				errorMessage.textContent = "We couldn't load your bag. Please clear your browser's saved site data and try again.";
+				console.error("Could not render saved Comfy bag.", error);
+			}
+		</script>
+	</body>
+</html>

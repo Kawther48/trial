@@ -1,7 +1,5 @@
 ---
 import { products } from "../../data/products.js";
-import HoodieArt from "../../components/HoodieArt.astro";
-import HoodieModelArt from "../../components/HoodieModelArt.astro";
 
 export function getStaticPaths() {
 	return products.map((product) => ({
@@ -12,6 +10,10 @@ export function getStaticPaths() {
 
 const { product } = Astro.props;
 const base = `${import.meta.env.BASE_URL}/`;
+const gallery = product.modelImages.map((image, index) => ({
+	label: `Model photo ${index + 1}`,
+	image,
+}));
 ---
 
 <!doctype html>
@@ -106,6 +108,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				grid-template-columns: repeat(2, minmax(0, 1fr));
 				gap: 12px;
 			}
+			.gallery.single-photo { grid-template-columns: minmax(0, 1fr); }
 			.view {
 				position: relative;
 				min-width: 0;
@@ -113,9 +116,11 @@ const base = `${import.meta.env.BASE_URL}/`;
 				aspect-ratio: .79;
 				background: #e9e5f5;
 			}
-			.view .model-art, .view .hoodie-art {
+			.view img {
 				width: 100%;
 				height: 100%;
+				object-fit: cover;
+				object-position: center;
 			}
 			.view span {
 				position: absolute;
@@ -262,6 +267,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				header { height: 66px; padding-inline: 20px; }
 				nav { gap: 14px; }
 				nav a { display: none; }
+				nav a.cart { display: inline-flex; }
 				main { padding: 24px 20px 60px; }
 				.product-layout { grid-template-columns: 1fr; gap: 24px; }
 				.product-info { position: static; grid-row: 1; padding-top: 8px; }
@@ -286,19 +292,17 @@ const base = `${import.meta.env.BASE_URL}/`;
 			<nav aria-label="Main navigation">
 				<a href={`${base}#collection`}>All hoodies</a>
 				<a href={`${base}#our-thing`}>Our thing</a>
-				<button class="cart" type="button" aria-label="Shopping bag, 0 items">BAG <span id="cart-count">0</span></button>
+				<a class="cart" href={`${base}cart/`} aria-label="Shopping bag, 0 items">BAG <span id="cart-count">0</span></a>
 			</nav>
 		</header>
 		<main>
 			<div class="breadcrumbs"><a href={base}>Home</a><span>/</span><a href={`${base}#collection`}>Hoodies</a><span>/</span><span>{product.name}</span></div>
 			<div class="product-layout">
-				<div class="gallery">
-					{["front", "back", "side", "details"].map((view) => (
+				<div class:list={["gallery", { "single-photo": gallery.length === 1 }]}>
+					{gallery.map((view) => (
 						<div class="view">
-							{view === "details"
-								? <HoodieArt product={product} view="details" />
-								: <HoodieModelArt product={product} view={view} />}
-							<span>{view === "details" ? "Pocket & thumb-hole details" : `Model · ${view} view`}</span>
+							<img src={view.image} alt={`${product.color} hoodie, ${view.label.toLowerCase()} on a model`} width="900" height="1350" loading="lazy" />
+							<span>{view.label}</span>
 						</div>
 					))}
 				</div>
@@ -321,7 +325,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 						<option value="XL">XL</option>
 						<option value="XXL">XXL</option>
 					</select>
-					<button class="add-to-bag" type="button" id="add-to-bag">Add to bag <span>↗</span></button>
+					<button class="add-to-bag" type="button" id="add-to-bag" data-slug={product.slug} data-name={product.name}>Add to bag <span>↗</span></button>
 					<p class="shipping-note">Easy returns · Made for repeat wear</p>
 					<div class="specs">
 						<h2>Good to know</h2>
@@ -345,21 +349,22 @@ const base = `${import.meta.env.BASE_URL}/`;
 			<p class="disclaimer">THIS IS NOT A REAL BUSINESS, IT IS A MOCK-UP CREATED FOR DEMONSTRATION PURPOSES ONLY</p>
 		</footer>
 		<div class="toast" id="toast" role="status" aria-live="polite"></div>
-		<script define:vars={{ productName: product.name }}>
-			const count = document.querySelector("#cart-count");
-			const cartButton = document.querySelector(".cart");
-			const toast = document.querySelector("#toast");
-			const storedCount = Number(localStorage.getItem("comfy-cart-count") || 0);
-			count.textContent = String(storedCount);
-			cartButton.setAttribute("aria-label", `Shopping bag, ${storedCount} items`);
+		<script>
+			import { addToCart, cartCount } from "../../scripts/cart.js";
 
-			document.querySelector("#add-to-bag").addEventListener("click", () => {
-				const nextCount = Number(localStorage.getItem("comfy-cart-count") || 0) + 1;
-				localStorage.setItem("comfy-cart-count", String(nextCount));
+			const count = document.querySelector("#cart-count");
+			const cartLink = document.querySelector(".cart");
+			const toast = document.querySelector("#toast");
+			const addButton = document.querySelector("#add-to-bag");
+			const countAtStart = cartCount();
+			count.textContent = String(countAtStart);
+			cartLink.setAttribute("aria-label", `Shopping bag, ${countAtStart} items`);
+
+			addButton.addEventListener("click", () => {
+				const nextCount = addToCart(addButton.dataset.slug, document.querySelector("#size").value);
 				count.textContent = String(nextCount);
-				cartButton.setAttribute("aria-label", `Shopping bag, ${nextCount} items`);
-				const size = document.querySelector("#size").value;
-				toast.textContent = `${size} ${productName} added to your bag`;
+				cartLink.setAttribute("aria-label", `Shopping bag, ${nextCount} items`);
+				toast.textContent = `${document.querySelector("#size").value} ${addButton.dataset.name} added to your bag`;
 				toast.classList.add("show");
 				window.setTimeout(() => toast.classList.remove("show"), 2300);
 			});

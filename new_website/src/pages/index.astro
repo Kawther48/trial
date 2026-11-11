@@ -1,6 +1,5 @@
 ---
 import { products } from "../data/products.js";
-import HoodieArt from "../components/HoodieArt.astro";
 
 const closetOrder = [
 	"grape-escape",
@@ -176,6 +175,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				display: block;
 				width: min(100%, 360px);
 				height: 100%;
+				object-fit: contain;
 				filter: drop-shadow(0 22px 18px #51466f2b);
 				transform: rotate(2deg) scale(1.15);
 			}
@@ -543,6 +543,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				header { height: 66px; padding-inline: 20px; }
 				nav { gap: 14px; }
 				nav a { display: none; }
+				nav a.cart { display: inline-flex; }
 				.hero {
 					min-height: 0;
 					grid-template-columns: 1fr;
@@ -582,7 +583,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 			<nav aria-label="Main navigation">
 				<a href="#collection">The hoodies</a>
 				<a href="#our-thing">Our thing</a>
-				<button class="cart" type="button" aria-label="Shopping bag, 0 items">BAG <span id="cart-count">0</span></button>
+				<a class="cart" href={`${base}cart/`} aria-label="Shopping bag, 0 items">BAG <span id="cart-count">0</span></a>
 			</nav>
 		</header>
 
@@ -595,7 +596,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 					<a class="hero-cta" href="#collection">Click the hoodie you like <b>↓</b></a>
 				</div>
 				<div class="hero-art">
-					<div class="hero-photo"><HoodieArt product={heroProduct} view="front" /></div>
+					<img class="hero-photo" src={heroProduct.listingImage} alt={`${heroProduct.color} hoodie`} width="900" height="1200" fetchpriority="high" />
 					<div class="hero-sticker">SOFT<br />LOOKS GOOD<br />ON YOU ✳</div>
 				</div>
 			</section>
@@ -622,7 +623,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 								<a class="product-link" href={`${base}hoodies/${product.slug}/`} aria-label={`View ${product.name} hoodie`}>
 									<div class="hanger" aria-hidden="true"></div>
 									<div class="garment">
-										<HoodieArt product={product} view="front" />
+										<img src={product.listingImage} alt={`${product.color} hoodie`} width="850" height="1100" loading="lazy" />
 										{product.badge && <span class="badge">{product.badge}</span>}
 									</div>
 									<div class="product-caption">
@@ -640,7 +641,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 					<button class="closet-doors" type="button" aria-label="Open the cupboard to choose your mood" aria-expanded="false" aria-controls="hanger-rail">
 						<div class="door door-left"></div>
 						<div class="door door-right"></div>
-						<span class="door-label">choose your mood</span>
+						<span class="door-label">Choose your mood</span>
 					</button>
 				</div>
 				<div class="scroll-hint">Swipe or scroll to explore all 8 ↔</div>
@@ -659,13 +660,14 @@ const base = `${import.meta.env.BASE_URL}/`;
 		</footer>
 		<div class="toast" id="toast" role="status" aria-live="polite"></div>
 		<script>
+			import { cartCount as getCartCount } from "../scripts/cart.js";
+
 			const rail = document.querySelector("#hanger-rail");
 			const cards = [...document.querySelectorAll(".product-card")];
-			const cartCount = document.querySelector("#cart-count");
-			const cartButton = document.querySelector(".cart");
-			const storedCount = Number(localStorage.getItem("comfy-cart-count") || 0);
-			cartCount.textContent = String(storedCount);
-			cartButton.setAttribute("aria-label", `Shopping bag, ${storedCount} items`);
+			const cartLink = document.querySelector(".cart");
+			const count = getCartCount();
+			cartLink.querySelector("#cart-count").textContent = String(count);
+			cartLink.setAttribute("aria-label", `Shopping bag, ${count} items`);
 			const wardrobe = document.querySelector("#wardrobe");
 			const collection = document.querySelector("#collection");
 			const closetDoors = document.querySelector(".closet-doors");
