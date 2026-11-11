@@ -1,5 +1,7 @@
 ---
 import { products } from "../../data/products.js";
+import HoodieArt from "../../components/HoodieArt.astro";
+import HoodieModelArt from "../../components/HoodieModelArt.astro";
 
 export function getStaticPaths() {
 	return products.map((product) => ({
@@ -18,7 +20,8 @@ const base = `${import.meta.env.BASE_URL}/`;
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={`${product.name}: ${product.description}`} />
-		<meta name="theme-color" content="#f7f3eb" />
+		<meta name="theme-color" content="#f7f5ff" />
+		<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 		<title>{product.name} Hoodie — Comfy</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,18 +29,18 @@ const base = `${import.meta.env.BASE_URL}/`;
 		<style>
 			:root {
 				font-family: "DM Sans", sans-serif;
-				color: #30283b;
-				background: #f7f3eb;
+				color: #34304d;
+				background: #f7f5ff;
 				font-synthesis: none;
 				text-rendering: optimizeLegibility;
-				--ink: #30283b;
-				--muted: #827c86;
-				--paper: #f7f3eb;
-				--purple: #a894d1;
-				--cyan: #a8dfe3;
-				--pink: #f0c2d3;
+				--ink: #34304d;
+				--muted: #77728b;
+				--paper: #f7f5ff;
+				--purple: #b9a3e6;
+				--cyan: #b5e7e4;
+				--blue: #b9d1f4;
 				--yellow: #f0df9e;
-				--line: #e7e0d7;
+				--line: #e4def1;
 				--display: "Space Grotesk", sans-serif;
 			}
 			* { box-sizing: border-box; }
@@ -70,10 +73,10 @@ const base = `${import.meta.env.BASE_URL}/`;
 				font-weight: 700;
 				letter-spacing: -.09em;
 			}
-			.brand span { color: #947bbd; }
+			.brand span { color: #967fc7; }
 			nav { display: flex; align-items: center; gap: 30px; }
 			nav a { font-size: 12px; font-weight: 600; }
-			nav a:hover { color: #8368ad; }
+			nav a:hover { color: #806bb1; }
 			.cart {
 				padding: 10px 15px;
 				border: 1px solid var(--ink);
@@ -82,7 +85,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				font-size: 11px;
 				font-weight: 700;
 			}
-			.cart span { margin-left: 7px; color: #8368ad; }
+			.cart span { margin-left: 7px; color: #806bb1; }
 			main { max-width: 1300px; margin: auto; padding: 34px 7% 90px; }
 			.breadcrumbs {
 				display: flex;
@@ -108,13 +111,11 @@ const base = `${import.meta.env.BASE_URL}/`;
 				min-width: 0;
 				overflow: hidden;
 				aspect-ratio: .79;
-				background: #eee8df;
+				background: #e9e5f5;
 			}
-			.view img {
+			.view .model-art, .view .hoodie-art {
 				width: 100%;
 				height: 100%;
-				object-fit: cover;
-				object-position: center;
 			}
 			.view span {
 				position: absolute;
@@ -153,7 +154,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				line-height: .96;
 			}
 			.color { margin-bottom: 17px; color: var(--muted); font-size: 12px; }
-			.description { max-width: 420px; color: #726b76; font-size: 13px; line-height: 1.75; }
+			.description { max-width: 420px; color: #726d84; font-size: 13px; line-height: 1.75; }
 			.price-line {
 				display: flex;
 				align-items: baseline;
@@ -167,7 +168,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				width: 100%;
 				height: 48px;
 				padding: 0 14px;
-				border: 1px solid #d6ced2;
+				border: 1px solid #cec8df;
 				border-radius: 2px;
 				background: transparent;
 				font-size: 12px;
@@ -189,7 +190,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				text-transform: uppercase;
 				transition: background 160ms ease;
 			}
-			.add-to-bag:hover { background: #57476c; }
+			.add-to-bag:hover { background: #51466f; }
 			.add-to-bag span { color: var(--yellow); font-size: 17px; }
 			.shipping-note {
 				margin: 13px 0 0;
@@ -210,13 +211,13 @@ const base = `${import.meta.env.BASE_URL}/`;
 				display: flex;
 				align-items: baseline;
 				gap: 11px;
-				color: #67616b;
+				color: #67627d;
 				font-size: 11px;
 			}
-			.specs li::before { content: "✳"; color: #947bbd; font-size: 12px; }
+			.specs li::before { content: "✳"; color: #967fc7; font-size: 12px; }
 			.slogan {
 				padding: 62px 20px 57px;
-				background: #e8e1ee;
+				background: #e2eafa;
 				text-align: center;
 			}
 			.slogan blockquote {
@@ -227,7 +228,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				letter-spacing: -.065em;
 				line-height: 1.12;
 			}
-			.slogan blockquote span { color: #8269a9; }
+			.slogan blockquote span { color: #806bb1; }
 			.slogan p { margin: 19px 0 0; font-size: 10px; font-weight: 700; letter-spacing: .13em; }
 			footer {
 				display: flex;
@@ -240,8 +241,8 @@ const base = `${import.meta.env.BASE_URL}/`;
 				font-size: 10px;
 			}
 			footer .brand { font-size: 23px; }
-			footer p { margin: 0; color: #d3ced8; }
-			footer .disclaimer { color: #f0df9e; }
+			footer p { margin: 0; color: #e2def1; }
+			footer .disclaimer { max-width: 430px; color: var(--yellow); font-size: 9px; font-weight: 700; line-height: 1.5; letter-spacing: .06em; }
 			.toast {
 				position: fixed;
 				right: 20px;
@@ -279,7 +280,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 		</style>
 	</head>
 	<body>
-		<div class="announcement">A little more you, a little less everyone else. <span>Free shipping over $100</span></div>
+		<div class="announcement">THIS IS NOT A REAL BUSINESS, IT IS A MOCK-UP CREATED FOR DEMONSTRATION PURPOSES ONLY</div>
 		<header>
 			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
 			<nav aria-label="Main navigation">
@@ -292,10 +293,12 @@ const base = `${import.meta.env.BASE_URL}/`;
 			<div class="breadcrumbs"><a href={base}>Home</a><span>/</span><a href={`${base}#collection`}>Hoodies</a><span>/</span><span>{product.name}</span></div>
 			<div class="product-layout">
 				<div class="gallery">
-					{product.modelImages.map((image, index) => (
+					{["front", "back", "side", "details"].map((view) => (
 						<div class="view">
-							<img src={image} alt={`Model wearing the ${product.color} ${product.name} hoodie, look ${index + 1}`} width="900" height="1400" loading={index < 2 ? "eager" : "lazy"} />
-							<span>On-model look {index + 1}</span>
+							{view === "details"
+								? <HoodieArt product={product} view="details" />
+								: <HoodieModelArt product={product} view={view} />}
+							<span>{view === "details" ? "Pocket & thumb-hole details" : `Model · ${view} view`}</span>
 						</div>
 					))}
 				</div>
@@ -339,7 +342,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
 			<p>Wear it on repeat. Feel good doing it.</p>
 			<p>© 2025 COMFY STUDIO</p>
-			<p class="disclaimer">This is a model website — Comfy is not a real business.</p>
+			<p class="disclaimer">THIS IS NOT A REAL BUSINESS, IT IS A MOCK-UP CREATED FOR DEMONSTRATION PURPOSES ONLY</p>
 		</footer>
 		<div class="toast" id="toast" role="status" aria-live="polite"></div>
 		<script define:vars={{ productName: product.name }}>

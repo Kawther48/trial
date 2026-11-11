@@ -1,5 +1,6 @@
 ---
 import { products } from "../data/products.js";
+import HoodieArt from "../components/HoodieArt.astro";
 
 const closetOrder = [
 	"grape-escape",
@@ -22,7 +23,8 @@ const base = `${import.meta.env.BASE_URL}/`;
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content="Meet Comfy: hoodies for slow mornings, late nights, and everything in between." />
-		<meta name="theme-color" content="#f7f3eb" />
+		<meta name="theme-color" content="#f7f5ff" />
+		<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
 		<title>Comfy — Pick your new favorite hoodie</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,18 +32,18 @@ const base = `${import.meta.env.BASE_URL}/`;
 		<style>
 			:root {
 				font-family: "DM Sans", sans-serif;
-				color: #30283b;
-				background: #f7f3eb;
+				color: #34304d;
+				background: #f7f5ff;
 				font-synthesis: none;
 				text-rendering: optimizeLegibility;
-				--ink: #30283b;
-				--muted: #827c86;
-				--paper: #f7f3eb;
-				--purple: #a894d1;
-				--cyan: #a8dfe3;
-				--pink: #f0c2d3;
+				--ink: #34304d;
+				--muted: #77728b;
+				--paper: #f7f5ff;
+				--purple: #b9a3e6;
+				--cyan: #b5e7e4;
+				--blue: #b9d1f4;
 				--yellow: #f0df9e;
-				--line: #e7e0d7;
+				--line: #e4def1;
 				--display: "Space Grotesk", sans-serif;
 			}
 			* { box-sizing: border-box; }
@@ -75,10 +77,10 @@ const base = `${import.meta.env.BASE_URL}/`;
 				font-weight: 700;
 				letter-spacing: -.09em;
 			}
-			.brand i { color: #947bbd; font-style: normal; }
+			.brand i { color: #967fc7; font-style: normal; }
 			nav { display: flex; align-items: center; gap: 30px; }
 			nav a { font-size: 12px; font-weight: 600; }
-			nav a:hover { color: #8368ad; }
+			nav a:hover { color: #806bb1; }
 			.cart {
 				padding: 10px 15px;
 				border: 1px solid var(--ink);
@@ -87,7 +89,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				font-size: 11px;
 				font-weight: 700;
 			}
-			.cart span { margin-left: 7px; color: #8368ad; }
+			.cart span { margin-left: 7px; color: #806bb1; }
 			.hero {
 				min-height: 580px;
 				position: relative;
@@ -109,14 +111,14 @@ const base = `${import.meta.env.BASE_URL}/`;
 				height: 400px;
 				right: 9%;
 				top: 12%;
-				background: #ece5f2;
+				background: #e5e0f6;
 			}
 			.hero::after {
 				width: 170px;
 				height: 170px;
 				right: 8%;
 				bottom: 3%;
-				background: #f5e8dc;
+				background: #e0f2f1;
 			}
 			.hero-copy { position: relative; z-index: 1; }
 			.eyebrow {
@@ -138,10 +140,10 @@ const base = `${import.meta.env.BASE_URL}/`;
 				letter-spacing: -.105em;
 				line-height: .8;
 			}
-			h1 span { color: #9c83c5; }
+			h1 span { color: #8e78bf; }
 			.hero-copy > p {
 				margin: 23px 0 28px;
-				color: #77707a;
+				color: #726d84;
 				font-size: 14px;
 				line-height: 1.7;
 			}
@@ -160,7 +162,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				text-transform: uppercase;
 				transition: transform 160ms ease, background 160ms ease;
 			}
-			.hero-cta:hover { transform: translateY(-3px); background: #57476c; }
+			.hero-cta:hover { transform: translateY(-3px); background: #51466f; }
 			.hero-cta b { color: var(--yellow); font-size: 17px; font-weight: 400; }
 			.hero-art {
 				height: 400px;
@@ -171,11 +173,11 @@ const base = `${import.meta.env.BASE_URL}/`;
 			.hero-photo {
 				position: relative;
 				z-index: 1;
+				display: block;
 				width: min(100%, 360px);
 				height: 100%;
-				object-fit: contain;
-				filter: drop-shadow(0 22px 18px #51423a2b);
-				transform: rotate(2deg);
+				filter: drop-shadow(0 22px 18px #51466f2b);
+				transform: rotate(2deg) scale(1.15);
 			}
 			.hero-sticker {
 				position: absolute;
@@ -197,7 +199,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 			}
 			.collection {
 				padding: 77px 0 89px;
-				background: #f0ece5;
+				background: #eeebf9;
 				overflow: hidden;
 			}
 			.collection-heading {
@@ -226,7 +228,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 			.rail-controls button {
 				width: 39px;
 				height: 39px;
-				border: 1px solid #cfc7c4;
+				border: 1px solid #cfc7df;
 				border-radius: 50%;
 				background: transparent;
 				font-size: 17px;
@@ -237,17 +239,17 @@ const base = `${import.meta.env.BASE_URL}/`;
 				margin: 26px 7% 0;
 				padding: 26px 0 18px;
 				perspective: 1400px;
-				background: linear-gradient(90deg, #c9bcb0, #e5ddd3 5%, #eae3da 95%, #bcae9f);
-				border: 8px solid #d5c9bc;
-				box-shadow: 0 22px 40px #483c3218, inset 0 0 0 2px #f7f0e7;
+				background: linear-gradient(90deg, #aebfe0, #dce5f6 5%, #e7eafa 95%, #aebfe0);
+				border: 8px solid #c7d4ee;
+				box-shadow: 0 22px 40px #47426718, inset 0 0 0 2px #f7f5ff;
 			}
 			.wardrobe-interior {
 				position: absolute;
 				inset: 0;
 				overflow: hidden;
 				background:
-					linear-gradient(90deg, #d2c5b8 0, transparent 7%, transparent 93%, #cbbdaf 100%),
-					linear-gradient(180deg, #e7ded3, #f3ece2 52%, #d8cbbd);
+					linear-gradient(90deg, #c4d2ec 0, transparent 7%, transparent 93%, #c4d2ec 100%),
+					linear-gradient(180deg, #dce5f6, #f4f2fb 52%, #d7e8ee);
 			}
 			.wardrobe-interior::before, .wardrobe-interior::after {
 				content: "";
@@ -255,8 +257,8 @@ const base = `${import.meta.env.BASE_URL}/`;
 				left: 0;
 				right: 0;
 				height: 12px;
-				background: linear-gradient(#f9f4ed, #c9bbad);
-				box-shadow: 0 5px 8px #57483b18;
+				background: linear-gradient(#f7f5ff, #b9c9e6);
+				box-shadow: 0 5px 8px #47426718;
 			}
 			.wardrobe-interior::before { top: 0; }
 			.wardrobe-interior::after { bottom: 0; }
@@ -268,8 +270,8 @@ const base = `${import.meta.env.BASE_URL}/`;
 				padding: 7px 12px;
 				transform: translateX(-50%);
 				border-radius: 2px;
-				background: #f7f3ebd9;
-				color: #827c86;
+				background: #f7f5ffed;
+				color: #716c85;
 				font-size: 8px;
 				font-weight: 700;
 				letter-spacing: .16em;
@@ -288,10 +290,10 @@ const base = `${import.meta.env.BASE_URL}/`;
 				right: 22px;
 				left: 22px;
 				height: 7px;
-				border: 1px solid #b7aaa0;
+				border: 1px solid #9faecb;
 				border-radius: 10px;
-				background: linear-gradient(180deg, #fff, #bdb1a8);
-				box-shadow: 0 5px 10px #51423a2b;
+				background: linear-gradient(180deg, #fff, #aebcda);
+				box-shadow: 0 5px 10px #51466f2b;
 			}
 			.hanger-rail {
 				position: relative;
@@ -303,10 +305,10 @@ const base = `${import.meta.env.BASE_URL}/`;
 				scroll-snap-type: x mandatory;
 				scroll-padding-inline: calc((100% - 190px) / 2);
 				scrollbar-width: thin;
-				scrollbar-color: #b7a9c5 transparent;
+				scrollbar-color: #b6a4df transparent;
 			}
 			.hanger-rail::-webkit-scrollbar { height: 6px; }
-			.hanger-rail::-webkit-scrollbar-thumb { border-radius: 10px; background: #b7a9c5; }
+			.hanger-rail::-webkit-scrollbar-thumb { border-radius: 10px; background: #b6a4df; }
 			.product-card {
 				flex: 0 0 190px;
 				position: relative;
@@ -326,7 +328,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				width: 56px;
 				height: 38px;
 				transform: translateX(-50%);
-				filter: drop-shadow(0 3px 2px #51423a35);
+				filter: drop-shadow(0 3px 2px #51466f35);
 			}
 			.hanger::before {
 				content: "";
@@ -335,7 +337,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				left: 24px;
 				width: 10px;
 				height: 15px;
-				border: 2px solid #958a83;
+				border: 2px solid #8c82ad;
 				border-bottom: 0;
 				border-radius: 9px 9px 2px 2px;
 			}
@@ -346,8 +348,8 @@ const base = `${import.meta.env.BASE_URL}/`;
 				left: 0;
 				width: 54px;
 				height: 31px;
-				background: linear-gradient(165deg, transparent 46%, #9f938a 48%, #9f938a 52%, transparent 54%) left,
-					linear-gradient(195deg, transparent 46%, #9f938a 48%, #9f938a 52%, transparent 54%) right;
+				background: linear-gradient(165deg, transparent 46%, #8c82ad 48%, #8c82ad 52%, transparent 54%) left,
+					linear-gradient(195deg, transparent 46%, #8c82ad 48%, #8c82ad 52%, transparent 54%) right;
 				background-size: 50% 100%;
 				background-repeat: no-repeat;
 			}
@@ -356,14 +358,14 @@ const base = `${import.meta.env.BASE_URL}/`;
 				width: 100%;
 				height: 250px;
 				overflow: visible;
-				filter: drop-shadow(0 11px 9px #51423a25);
+				filter: drop-shadow(0 11px 9px #51466f25);
 				transition: filter 300ms ease, transform 400ms ease;
 				transform: perspective(800px) rotateY(-8deg);
 				background: transparent;
 			}
 			.is-focused .garment {
 				transform: perspective(800px) rotateY(0) translateY(-11px) scale(1.08);
-				filter: drop-shadow(0 19px 15px #51423a32);
+				filter: drop-shadow(0 19px 15px #51466f32);
 			}
 			.garment img {
 				width: 100%;
@@ -378,29 +380,32 @@ const base = `${import.meta.env.BASE_URL}/`;
 				display: grid;
 				grid-template-columns: 1fr 1fr;
 				perspective: 1400px;
-				pointer-events: none;
+				width: 100%;
+				height: 100%;
+				padding: 0;
+				border: 0;
+				background: transparent;
+				cursor: pointer;
 			}
+			.closet-doors:focus-visible { outline: 3px solid #806bb1; outline-offset: -5px; }
 			.door {
 				position: relative;
-				border: 1px solid #c5b6a8;
+				border: 1px solid #aebcda;
 				background:
-					linear-gradient(90deg, #fff3, transparent 10%, transparent 88%, #75665a21),
-					linear-gradient(135deg, #e4d8c9, #cfc0b1 48%, #e9ded1);
-				box-shadow: inset 0 0 0 8px #dfd2c4, inset 0 0 0 10px #c9b9aa;
+					linear-gradient(90deg, #fff6, transparent 10%, transparent 88%, #55507b21),
+					linear-gradient(135deg, #e4e0f5, #c9d4ee 48%, #ebe9f8);
+				box-shadow: inset 0 0 0 8px #dce4f6, inset 0 0 0 10px #b8c5e1;
 				backface-visibility: hidden;
-				animation-duration: 1250ms;
-				animation-delay: 250ms;
-				animation-timing-function: cubic-bezier(.2,.75,.2,1);
-				animation-fill-mode: forwards;
+				transition: transform 1250ms cubic-bezier(.2,.75,.2,1);
 			}
 			.door-left {
 				transform-origin: left center;
-				animation-name: open-left-door;
 			}
 			.door-right {
 				transform-origin: right center;
-				animation-name: open-right-door;
 			}
+			.wardrobe.is-open .door-left { transform: rotateY(-108deg); }
+			.wardrobe.is-open .door-right { transform: rotateY(108deg); }
 			.door::before {
 				content: "";
 				position: absolute;
@@ -409,8 +414,8 @@ const base = `${import.meta.env.BASE_URL}/`;
 				height: 38px;
 				margin-top: -19px;
 				border-radius: 5px;
-				background: linear-gradient(90deg, #8b7b6e, #d9c8b5, #8d7a68);
-				box-shadow: 1px 2px 4px #45372d40;
+				background: linear-gradient(90deg, #8b83b2, #d7d4ed, #8279a8);
+				box-shadow: 1px 2px 4px #453c6b40;
 			}
 			.door-left::before { right: 16px; }
 			.door-right::before { left: 16px; }
@@ -418,19 +423,16 @@ const base = `${import.meta.env.BASE_URL}/`;
 				position: absolute;
 				top: 50%;
 				left: 50%;
-				color: #817366;
+				color: #625a87;
 				font-family: var(--display);
-				font-size: clamp(18px, 3vw, 34px);
+				font-size: clamp(16px, 3vw, 30px);
 				font-weight: 600;
-				letter-spacing: -.08em;
+				letter-spacing: -.06em;
 				transform: translate(-50%, -50%);
+				white-space: nowrap;
+				transition: opacity 250ms ease;
 			}
-			@keyframes open-left-door {
-				to { transform: rotateY(-108deg); }
-			}
-			@keyframes open-right-door {
-				to { transform: rotateY(108deg); }
-			}
+			.wardrobe.is-open .door-label { opacity: 0; }
 			.badge {
 				position: absolute;
 				top: 12px;
@@ -456,7 +458,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 			.product-link:focus-visible { outline: 2px solid #8266ae; }
 			.scroll-hint {
 				padding: 8px 7% 0;
-				color: #827c86;
+				color: #77728b;
 				font-size: 9px;
 				font-weight: 700;
 				letter-spacing: .12em;
@@ -465,7 +467,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 			}
 			.slogan {
 				padding: 82px 20px 77px;
-				background: #e8e1ee;
+				background: #e2eafa;
 				text-align: center;
 			}
 			.slogan blockquote {
@@ -476,7 +478,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 				letter-spacing: -.065em;
 				line-height: 1.12;
 			}
-			.slogan blockquote span { color: #8269a9; }
+			.slogan blockquote span { color: #806bb1; }
 			.slogan p {
 				margin: 22px 0 0;
 				font-size: 10px;
@@ -494,7 +496,8 @@ const base = `${import.meta.env.BASE_URL}/`;
 				font-size: 10px;
 			}
 			footer .brand { font-size: 23px; }
-			footer p { margin: 0; color: #d3ced8; }
+			footer p { margin: 0; color: #e2def1; }
+			footer .disclaimer { max-width: 430px; color: var(--yellow); font-size: 9px; font-weight: 700; line-height: 1.5; letter-spacing: .06em; }
 			.toast {
 				position: fixed;
 				right: 20px;
@@ -510,6 +513,32 @@ const base = `${import.meta.env.BASE_URL}/`;
 				transition: 180ms ease;
 			}
 			.toast.show { transform: translateY(0); opacity: 1; }
+			.hanger-window {
+				visibility: hidden;
+				opacity: 0;
+				transform: translateY(12px);
+				transition: opacity 400ms ease, transform 400ms ease, visibility 0s linear 400ms;
+			}
+			.wardrobe.is-open .hanger-window {
+				visibility: visible;
+				opacity: 1;
+				transform: translateY(0);
+				transition-delay: 300ms, 300ms, 0s;
+			}
+			.wardrobe.is-open .closet-doors { pointer-events: none; }
+			.rail-controls, .scroll-hint {
+				visibility: hidden;
+				opacity: 0;
+				transition: opacity 300ms ease, visibility 0s linear 300ms;
+			}
+			.collection.is-open .rail-controls, .collection.is-open .scroll-hint {
+				visibility: visible;
+				opacity: 1;
+				transition-delay: 0s;
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.hanger-window, .door, .door-label { transition-duration: .01ms; }
+			}
 			@media (max-width: 700px) {
 				header { height: 66px; padding-inline: 20px; }
 				nav { gap: 14px; }
@@ -542,12 +571,12 @@ const base = `${import.meta.env.BASE_URL}/`;
 				footer { align-items: flex-start; flex-direction: column; padding: 24px 22px; }
 			}
 			@media (prefers-reduced-motion: reduce) {
-				*, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+				*, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 			}
 		</style>
 	</head>
 	<body>
-		<div class="announcement">A little more you, a little less everyone else. <span>Free shipping over $100</span></div>
+		<div class="announcement">THIS IS NOT A REAL BUSINESS, IT IS A MOCK-UP CREATED FOR DEMONSTRATION PURPOSES ONLY</div>
 		<header>
 			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
 			<nav aria-label="Main navigation">
@@ -566,7 +595,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 					<a class="hero-cta" href="#collection">Click the hoodie you like <b>↓</b></a>
 				</div>
 				<div class="hero-art">
-					<img class="hero-photo" src={heroProduct.listingImage} alt={`${heroProduct.color} hoodie`} width="900" height="1400" fetchpriority="high" />
+					<div class="hero-photo"><HoodieArt product={heroProduct} view="front" /></div>
 					<div class="hero-sticker">SOFT<br />LOOKS GOOD<br />ON YOU ✳</div>
 				</div>
 			</section>
@@ -577,23 +606,23 @@ const base = `${import.meta.env.BASE_URL}/`;
 						<div class="eyebrow">Meet your new regulars</div>
 						<h2 id="collection-title">Pick your kind of cozy.</h2>
 					</div>
-					<p>Eight good moods, all on one hanger. Scroll to find the one that feels like you.</p>
+					<p>Eight pastel shades, waiting together on one hanger. Click the cupboard to choose your mood.</p>
 				</div>
 				<div class="rail-controls" aria-label="Hoodie collection controls">
 					<button type="button" id="rail-prev" aria-label="Scroll to previous hoodie">←</button>
 					<button type="button" id="rail-next" aria-label="Scroll to next hoodie">→</button>
 				</div>
-				<div class="wardrobe">
+				<div class="wardrobe" id="wardrobe">
 					<div class="wardrobe-interior" aria-hidden="true"></div>
-					<div class="wardrobe-label" aria-hidden="true">Comfy wardrobe · pick a mood</div>
+					<div class="wardrobe-label" aria-hidden="true">YOUR COZY COLLECTION</div>
 					<div class="hanger-window">
-						<div class="hanger-rail" id="hanger-rail" tabindex="0" aria-label="Scroll through eight hoodies">
+						<div class="hanger-rail" id="hanger-rail" tabindex="0" aria-label="Scroll through eight hoodies" aria-hidden="true" inert>
 						{closetProducts.map((product) => (
 							<article class="product-card">
 								<a class="product-link" href={`${base}hoodies/${product.slug}/`} aria-label={`View ${product.name} hoodie`}>
 									<div class="hanger" aria-hidden="true"></div>
 									<div class="garment">
-										<img src={product.listingImage} alt={`${product.color} hoodie`} width="900" height="1400" loading="lazy" />
+										<HoodieArt product={product} view="front" />
 										{product.badge && <span class="badge">{product.badge}</span>}
 									</div>
 									<div class="product-caption">
@@ -608,10 +637,11 @@ const base = `${import.meta.env.BASE_URL}/`;
 						))}
 						</div>
 					</div>
-					<div class="closet-doors" aria-hidden="true">
-						<div class="door door-left"><span class="door-label">Comfy</span></div>
-						<div class="door door-right"><span class="door-label">Comfy</span></div>
-					</div>
+					<button class="closet-doors" type="button" aria-label="Open the cupboard to choose your mood" aria-expanded="false" aria-controls="hanger-rail">
+						<div class="door door-left"></div>
+						<div class="door door-right"></div>
+						<span class="door-label">choose your mood</span>
+					</button>
 				</div>
 				<div class="scroll-hint">Swipe or scroll to explore all 8 ↔</div>
 			</section>
@@ -625,7 +655,7 @@ const base = `${import.meta.env.BASE_URL}/`;
 			<a class="brand" href={base} aria-label="Comfy home">Comfy<span>®</span></a>
 			<p>Wear it on repeat. Feel good doing it.</p>
 			<p>© 2025 COMFY STUDIO</p>
-			<p class="disclaimer">This is a model website — Comfy is not a real business.</p>
+			<p class="disclaimer">THIS IS NOT A REAL BUSINESS, IT IS A MOCK-UP CREATED FOR DEMONSTRATION PURPOSES ONLY</p>
 		</footer>
 		<div class="toast" id="toast" role="status" aria-live="polite"></div>
 		<script>
@@ -636,6 +666,18 @@ const base = `${import.meta.env.BASE_URL}/`;
 			const storedCount = Number(localStorage.getItem("comfy-cart-count") || 0);
 			cartCount.textContent = String(storedCount);
 			cartButton.setAttribute("aria-label", `Shopping bag, ${storedCount} items`);
+			const wardrobe = document.querySelector("#wardrobe");
+			const collection = document.querySelector("#collection");
+			const closetDoors = document.querySelector(".closet-doors");
+			closetDoors.addEventListener("click", () => {
+				wardrobe.classList.add("is-open");
+				collection.classList.add("is-open");
+				closetDoors.setAttribute("aria-expanded", "true");
+				closetDoors.setAttribute("aria-label", "Cupboard open; choose your mood from the hoodie rail");
+				closetDoors.tabIndex = -1;
+				rail.removeAttribute("inert");
+				rail.setAttribute("aria-hidden", "false");
+			}, { once: true });
 
 			const updateFocusedCard = () => {
 				const railBounds = rail.getBoundingClientRect();
